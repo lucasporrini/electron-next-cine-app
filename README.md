@@ -1,6 +1,6 @@
 <h3 align="center">
 	<img src="https://github.com/DarkGuy10/NextJS-Electron-Boilerplate/assets/62807269/1f7a5a9a-a8c7-4ec7-b5f5-6a4fbfe0f1b2" alt="capybara" height="300px" /><br/>
-	「NextJS + Electron Boilerplate」
+	「NextJS + Electron」
 </h3>
 
 <h6 align="center">
