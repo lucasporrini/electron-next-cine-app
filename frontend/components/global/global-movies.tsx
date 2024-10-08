@@ -5,10 +5,10 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { DialogTitle } from "@radix-ui/react-dialog";
 import { useQuery } from "@tanstack/react-query";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import { Skeleton } from "../ui/skeleton";
@@ -30,8 +30,6 @@ export const GlobalMovies = ({ type }: { type: "popular" | "best" }) => {
       }
     },
   });
-
-  console.log(moviesByType);
 
   return (
     <div className="flex flex-col items-start gap-2 mt-6">
@@ -77,8 +75,11 @@ export const GlobalMovies = ({ type }: { type: "popular" | "best" }) => {
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <MovieTrailer movieId={movie.id} />
-                      <DialogTitle>{movie.title}</DialogTitle>
+                      <DialogTitle className="p-0 m-0"></DialogTitle>
+                      <MovieTrailer
+                        movieTitle={movie.title}
+                        movieId={movie.id}
+                      />
                       <DialogDescription>{movie.overview}</DialogDescription>
                     </DialogHeader>
                   </DialogContent>

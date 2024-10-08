@@ -1,10 +1,19 @@
 "use client";
 import { fetchMoviesByGenre, getGenres } from "@/actions/fetchMovies";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { DialogTitle } from "@radix-ui/react-dialog";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import { Skeleton } from "../ui/skeleton";
+import { MovieTrailer } from "./movie-trailer";
 
 export const GenreMovies = ({
   genreId,
@@ -41,7 +50,6 @@ export const GenreMovies = ({
     if (!genresIsLoading) {
       setCurrentGenre(genres.genres.find((genre) => genre.id === genreId).name);
     }
-    console.log(genres);
   }, [genres, genreId, currentGenre, genresIsLoading]);
 
   return (
@@ -72,15 +80,25 @@ export const GenreMovies = ({
                 key={movie.id}
                 className="relative w-full pl-0 ml-4 overflow-hidden md:basis-1/4 lg:basis-1/6 group"
               >
-                <img
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                  alt={movie.title}
-                  className="w-full h-auto rounded-2xl"
-                />
-                <div className="absolute bottom-0 left-0 right-0 flex-col items-start hidden gap-2 p-1 text-white transition-all duration-300 bg-black bg-opacity-70 group-hover:flex">
-                  <h3 className="text-sm font-semibold">{movie.title}</h3>
-                  <p className="text-sm line-clamp-6">{movie.overview}</p>
-                </div>
+                <Dialog>
+                  <DialogTrigger>
+                    <img
+                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                      alt={movie.title}
+                      className="w-full h-auto rounded-2xl"
+                    />
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle className="p-0 m-0"></DialogTitle>
+                      <MovieTrailer
+                        movieTitle={movie.title}
+                        movieId={movie.id}
+                      />
+                      <DialogDescription>{movie.overview}</DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
               </CarouselItem>
             ))}
         </CarouselContent>
