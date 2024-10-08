@@ -12,7 +12,14 @@ const ProfilePage = () => {
 
   return (
     <div>
-      <h1>{user?.username}</h1>
+      <div className="flex items-center gap-2">
+        <img
+          className="rounded-full size-8"
+          src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671122.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1728172800&semt=ais_hybrid"
+          alt="User avatar"
+        />
+        <h1>{user?.username}</h1>
+      </div>
       <Button
         onClick={() => {
           localStorage.removeItem("user");

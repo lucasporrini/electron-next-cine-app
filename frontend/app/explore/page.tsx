@@ -11,6 +11,10 @@ const ExplorePage = () => {
       </h2>
       <GenreMovies genreId={28} pageId={1} />
       <GenreMovies genreId={18} pageId={1} />
+      <GenreMovies genreId={10749} pageId={1} />
+      <GenreMovies genreId={878} pageId={1} />
+      <GenreMovies genreId={16} pageId={1} />
+      <GenreMovies genreId={35} pageId={1} />
     </>
   );
 };

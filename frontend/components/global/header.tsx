@@ -1,5 +1,5 @@
 "use client";
-import { BellIcon, UserIcon } from "lucide-react";
+import { BellIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
@@ -38,12 +38,13 @@ const Header = () => {
       </Button>
       <Link href={user ? "/profile" : "/login"}>
         {user ? (
-          <div className="flex items-center gap-2 p-1 rounded-full bg-primary-foreground">
-            <UserIcon
-              size={18}
-              className="p-1 rounded-full bg-primary size-7"
+          <div className="flex items-center gap-2 p-1 rounded-full bg-primary-foreground hover:bg-secondary min-w-[110px] w-fit">
+            <img
+              className="rounded-full size-8"
+              src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671122.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1728172800&semt=ais_hybrid"
+              alt="User avatar"
             />
-            <span className="px-1 py-0.5">
+            <span className="px-1 py-0.5 w-[50px]">
               {user?.username.charAt(0).toUpperCase()}
               {user?.username.slice(1, 10)}
             </span>

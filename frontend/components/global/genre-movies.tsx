@@ -10,7 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import { Skeleton } from "../ui/skeleton";
 import { MovieTrailer } from "./movie-trailer";
@@ -23,6 +23,8 @@ export const GenreMovies = ({
   pageId: number;
 }) => {
   const [currentGenre, setCurrentGenre] = useState(null);
+  const [currentPage, setCurrentPage] = useState(pageId);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   const {
     data: genres,
@@ -40,17 +42,45 @@ export const GenreMovies = ({
     error,
     isLoading,
   } = useQuery({
-    queryKey: [`movies${currentGenre}`],
+    queryKey: [`movies${currentGenre}-${currentPage}`],
     queryFn: async () => {
-      return await fetchMoviesByGenre(genreId, pageId);
+      return await fetchMoviesByGenre(genreId, currentPage);
     },
   });
 
   useEffect(() => {
     if (!genresIsLoading) {
-      setCurrentGenre(genres.genres.find((genre) => genre.id === genreId).name);
+      setCurrentGenre(
+        genres.genres.find((genre) => genre.id === genreId)?.name
+      );
     }
-  }, [genres, genreId, currentGenre, genresIsLoading]);
+  }, [genres, genreId, genresIsLoading]);
+
+  useEffect(() => {
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    const callback = (entries: IntersectionObserverEntry[]) => {
+      if (entries[0].isIntersecting) {
+        setCurrentPage((prev) => prev + 1); // Charger plus de films
+      }
+    };
+
+    observerRef.current = new IntersectionObserver(callback);
+    const observerElement = document.getElementById(
+      `load-more-trigger-${genreId}`
+    );
+    if (observerElement) {
+      observerRef.current.observe(observerElement);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [genreId]);
 
   return (
     <div className="flex flex-col items-start gap-2 mt-6">
@@ -75,7 +105,7 @@ export const GenreMovies = ({
       <Carousel className="cursor-grab">
         <CarouselContent>
           {moviesByGenre &&
-            moviesByGenre.results.map((movie) => (
+            moviesByGenre.results.map((movie, index) => (
               <CarouselItem
                 key={movie.id}
                 className="relative w-full pl-0 ml-4 overflow-hidden md:basis-1/4 lg:basis-1/6 group"
@@ -101,6 +131,8 @@ export const GenreMovies = ({
                 </Dialog>
               </CarouselItem>
             ))}
+          {/* Cet élément déclencheur sert à observer la fin du carousel */}
+          <div id={`load-more-trigger-${genreId}`} className="w-full h-0"></div>
         </CarouselContent>
       </Carousel>
     </div>
