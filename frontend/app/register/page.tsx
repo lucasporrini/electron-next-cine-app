@@ -1,5 +1,6 @@
 "use client";
 
+import { useProfile } from "@/components/providers/profile-provider";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -12,17 +13,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export const description =
-  "A simple login form with email and password. The submit button says 'Sign in'.";
+  "A simple register form with email and password. The submit button says 'Sign in'.";
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const [user, setUser] = useState(null);
-  const router = useRouter();
+  const { setProfile } = useProfile();
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -36,6 +37,7 @@ const LoginForm = () => {
   const registerSchema = z
     .object({
       username: z.string().min(2).max(50),
+      email: z.string().email(),
       password: z.string().min(8).max(100),
       passwordConfirmation: z.string().min(8).max(100),
     })
@@ -48,6 +50,7 @@ const LoginForm = () => {
     resolver: zodResolver(registerSchema),
     defaultValues: {
       username: "",
+      email: "",
       password: "",
       passwordConfirmation: "",
     },
@@ -56,10 +59,16 @@ const LoginForm = () => {
   const handleSubmit = (values: z.infer<typeof registerSchema>) => {
     localStorage.setItem(
       "user",
-      JSON.stringify({ username: values.username, password: values.password })
+      JSON.stringify({
+        username: values.username,
+        password: values.password,
+        email: values.email,
+        name: values.username,
+      })
     );
 
     if (user) {
+      setProfile(user);
       redirect("/");
     }
   };
@@ -80,6 +89,23 @@ const LoginForm = () => {
                 <FormControl>
                   <Input
                     placeholder="Username"
+                    className="placeholder:text-white/50"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Email"
                     className="placeholder:text-white/50"
                     {...field}
                   />
@@ -138,4 +164,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

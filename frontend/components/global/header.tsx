@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useProfile } from "../providers/profile-provider";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import {
@@ -14,11 +15,12 @@ import { Notifications } from "./notifications";
 
 const Header = () => {
   const [user, setUser] = useState(null);
+  const { profile } = useProfile();
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    setUser(user);
-  }, []);
+    if (profile) setUser(profile);
+    else setUser(null);
+  }, [profile]);
 
   return (
     <header className="flex items-center gap-4">

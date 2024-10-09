@@ -1,5 +1,6 @@
 "use client";
 
+import { useProfile } from "@/components/providers/profile-provider";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -23,6 +24,7 @@ export const description =
 
 const LoginForm = () => {
   const [user, setUser] = useState(null);
+  const { setProfile } = useProfile();
   const router = useRouter();
 
   useEffect(() => {
@@ -62,13 +64,17 @@ const LoginForm = () => {
 
       if (userByEmail) {
         localStorage.setItem("user", JSON.stringify(userByEmail));
-        redirect("/");
+        setProfile(userByEmail);
+
+        router.push("/");
       }
     }
 
     if (userByUsername) {
       localStorage.setItem("user", JSON.stringify(userByUsername));
-      redirect("/");
+      setProfile(userByUsername);
+
+      router.push("/");
     }
   };
 

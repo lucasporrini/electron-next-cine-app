@@ -9,11 +9,13 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useProfile } from "../providers/profile-provider";
 import { Separator } from "../ui/separator";
 
 const Sidebar = () => {
   const [user, setUser] = useState(null);
   const [currentPath, setCurrentPath] = useState("");
+  const { profile } = useProfile();
 
   useEffect(() => {
     setCurrentPath(window.location.pathname);
@@ -62,7 +64,7 @@ const Sidebar = () => {
         </Link>
         <Separator className="opacity-10" />
         <Link
-          href={user ? "/profile" : "/login"}
+          href={profile ? "/profile" : "/login"}
           className="flex items-center gap-2 transition-all hover:text-secondary"
         >
           <UserIcon size={18} />
