@@ -1,5 +1,5 @@
 import { cn, convertDate } from "@/lib/utils";
-import { BellIcon } from "lucide-react";
+import { BellIcon, XIcon } from "lucide-react";
 import { useEffect } from "react";
 import { useNotifications } from "../providers/notifications-provider";
 import { Button } from "../ui/button";
@@ -75,11 +75,34 @@ export const Notifications = () => {
                 </span>
                 <span className="text-sm">{notification.description}</span>
               </div>
-              <span className="text-xs text-gray-400 min-w-fit">
-                {convertDate(notification.date)}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-gray-400 min-w-fit">
+                  {convertDate(notification.date)}
+                </span>
+                <XIcon
+                  size={20}
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setNotifications(
+                      notifications.filter((n, i) => i !== index)
+                    );
+                    // Supprimer la notification du localStorage
+                    localStorage.setItem(
+                      "notifications",
+                      JSON.stringify(
+                        notifications.filter((n, i) => i !== index)
+                      )
+                    );
+                  }}
+                />
+              </div>
             </div>
           ))}
+          {notifications.length === 0 && (
+            <div className="flex items-center justify-center p-4">
+              <span className="text-sm">Aucune notification</span>
+            </div>
+          )}
         </div>
       </PopoverContent>
     </Popover>

@@ -1,7 +1,9 @@
 "use client";
 import { HeartIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useNotifications } from "../providers/notifications-provider";
 import { Button } from "../ui/button";
+import { type Notifications } from "./notifications";
 
 interface Movie {
   id: number;
@@ -22,6 +24,7 @@ export const LikeButton = ({
   movieOverview: string;
 }) => {
   const [currentLikedMovies, setCurrentLikedMovies] = useState<Movie[]>([]);
+  const { notifications, setNotifications } = useNotifications();
 
   useEffect(() => {
     setCurrentLikedMovies(
@@ -41,18 +44,22 @@ export const LikeButton = ({
       localStorage.setItem("likedMovies", JSON.stringify(updatedMovies));
       setCurrentLikedMovies(updatedMovies);
 
+      const newNotification: Notifications = {
+        title: "Suppression des favoris",
+        description: `Le film ${movieTitle} a été supprimé des favoris`,
+        isRead: false,
+        date: new Date().toString(),
+      };
+
       localStorage.setItem(
         "notifications",
         JSON.stringify([
-          {
-            title: "Suppression des favoris",
-            description: `Le film ${movieTitle} a été supprimé des favoris`,
-            isRead: false,
-            date: new Date(),
-          },
+          newNotification,
           ...JSON.parse(localStorage.getItem("notifications") || "[]"),
         ])
       );
+
+      setNotifications([newNotification, ...notifications]);
     } else {
       const newMovie = {
         id: movieId,
@@ -64,18 +71,22 @@ export const LikeButton = ({
       localStorage.setItem("likedMovies", JSON.stringify(updatedMovies));
       setCurrentLikedMovies(updatedMovies);
 
+      const newNotification = {
+        title: "Nouvel ajout aux favoris",
+        description: `Le film ${movieTitle} a été ajouté à vos favoris`,
+        isRead: false,
+        date: new Date().toString(),
+      };
+
       localStorage.setItem(
         "notifications",
         JSON.stringify([
-          {
-            title: "Nouvel ajout aux favoris",
-            description: `Le film ${movieTitle} a été ajouté à vos favoris`,
-            isRead: false,
-            date: new Date(),
-          },
+          newNotification,
           ...JSON.parse(localStorage.getItem("notifications") || "[]"),
         ])
       );
+
+      setNotifications([newNotification, ...notifications]);
     }
   };
 
