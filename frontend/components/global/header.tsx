@@ -4,37 +4,60 @@ import { useEffect, useState } from "react";
 import { useProfile } from "../providers/profile-provider";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 import { Notifications } from "./notifications";
 
 const Header = () => {
   const [user, setUser] = useState(null);
   const { profile } = useProfile();
+  const [search, setSearch] = useState("");
+  const [result, setResult] = useState([]);
 
   useEffect(() => {
     if (profile) setUser(profile);
     else setUser(null);
   }, [profile]);
 
+  useEffect(() => {
+    // TODO: search for movies
+    setResult([
+      {
+        title: "Movie 1",
+        description: "Description 1",
+        date: "2021-09-01",
+      },
+      {
+        title: "Movie 2",
+        description: "Description 2",
+        date: "2021-09-02",
+      },
+    ]);
+  }, [search]);
+
   return (
     <header className="flex items-center gap-4">
-      <Select>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="All" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">All</SelectItem>
-          <SelectItem value="recent">Recent</SelectItem>
-          <SelectItem value="viewed">Viewed</SelectItem>
-        </SelectContent>
-      </Select>
-      <Input type="search" placeholder="Search" />
+      <Input
+        type="search"
+        placeholder="Search"
+        onInput={(event) => {
+          // attendre 500ms avant de lancer la recherche et annuler le setTimeout si l'utilisateur continue de taper
+          clearTimeout(window.searchTimeout);
+          window.searchTimeout = setTimeout(() => {
+            setSearch(event.target.value);
+            console.log("Search for:", event.target.value);
+          }, 500);
+        }}
+      />
+      {search && (
+        <div className="fixed z-50 px-4 py-2 top-1/2 left-1/2 bg-primary rounded-xl">
+          {result.map((movie, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <span>{movie.title}</span>
+              <span>{movie.description}</span>
+              <span>{movie.date}</span>
+            </div>
+          ))}
+        </div>
+      )}
       <Notifications />
       <Link href={user ? "/profile" : "/login"}>
         {user ? (
