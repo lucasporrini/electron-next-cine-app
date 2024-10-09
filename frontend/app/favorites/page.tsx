@@ -1,6 +1,7 @@
 "use client";
+import { useNotifications } from "@/components/providers/notifications-provider";
 import { Button } from "@/components/ui/button";
-import { HeartIcon } from "lucide-react";
+import { HeartIcon, HeartOffIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface Movie {
@@ -12,6 +13,7 @@ interface Movie {
 
 const FavoritesPage = () => {
   const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([]);
+  const { notifications, setNotifications } = useNotifications();
 
   useEffect(() => {
     // Récupérer les films favoris à partir du localStorage
@@ -28,6 +30,23 @@ const FavoritesPage = () => {
     setFavoriteMovies(updatedFavorites);
     // Mettre à jour le localStorage
     localStorage.setItem("likedMovies", JSON.stringify(updatedFavorites));
+
+    // Ajouter une notification
+    const newNotification = {
+      title: "Suppression des favoris",
+      description: `Le film ${
+        favoriteMovies.find((movie) => movie.id === movieId)?.title
+      } a été supprimé des favoris`,
+      isRead: false,
+      date: new Date().toString(),
+    };
+
+    localStorage.setItem(
+      "notifications",
+      JSON.stringify([newNotification, ...notifications])
+    );
+
+    setNotifications([newNotification, ...notifications]);
   };
 
   return (
@@ -37,7 +56,7 @@ const FavoritesPage = () => {
       {favoriteMovies.length > 0 ? (
         <div className="grid grid-cols-2 gap-10 md:grid-cols-4 lg:grid-cols-5">
           {favoriteMovies.map((movie: Movie) => (
-            <div key={movie.id} className="relative group">
+            <div key={movie.id} className="relative">
               <img
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={movie.title}
@@ -45,10 +64,21 @@ const FavoritesPage = () => {
               />
               <div className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2">
                 <Button
-                  className="p-0 bg-red-500 rounded-full aspect-square"
+                  className="p-0 bg-red-500 rounded-full aspect-square group"
                   onClick={() => removeFavorite(movie.id)}
                 >
-                  <HeartIcon size={20} color="white" fill="white" />
+                  <HeartIcon
+                    size={20}
+                    color="white"
+                    fill="white"
+                    className="group-hover:hidden"
+                  />
+                  <HeartOffIcon
+                    size={20}
+                    color="white"
+                    fill="white"
+                    className="hidden group-hover:block"
+                  />
                 </Button>
               </div>
               <div className="mt-2 text-center">
@@ -59,7 +89,7 @@ const FavoritesPage = () => {
         </div>
       ) : (
         <p className="text-lg text-gray-500">
-          Aucun film n'a été ajouté en favoris.
+          Aucun film n&apos;a été ajouté en favoris.
         </p>
       )}
     </div>
