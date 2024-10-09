@@ -4,13 +4,18 @@ import { Volume2, VolumeX } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
+import { LikeButton } from "./like-button";
 
 export const MovieTrailer = ({
   movieTitle,
   movieId,
+  movieOverview,
+  moviePosterPath,
 }: {
   movieTitle: string;
   movieId: number;
+  movieOverview: string;
+  moviePosterPath: string;
 }) => {
   const {
     data: movieVideos,
@@ -56,6 +61,12 @@ export const MovieTrailer = ({
                 {movieTitle}
               </h3>
               <div className="flex items-center gap-2">
+                <LikeButton
+                  movieId={movieId}
+                  movieTitle={movieTitle}
+                  movieOverview={movieOverview}
+                  moviePosterPath={moviePosterPath}
+                />
                 <Button
                   className="flex p-0 rounded-full bg-primary top-4 right-4 aspect-square"
                   onClick={() => setMute(!mute)}

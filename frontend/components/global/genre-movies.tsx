@@ -124,6 +124,8 @@ export const GenreMovies = ({
                       <MovieTrailer
                         movieTitle={movie.title}
                         movieId={movie.id}
+                        movieOverview={movie.overview}
+                        moviePosterPath={movie.poster_path}
                       />
                       <DialogDescription>{movie.overview}</DialogDescription>
                     </DialogHeader>
@@ -131,7 +133,6 @@ export const GenreMovies = ({
                 </Dialog>
               </CarouselItem>
             ))}
-          {/* Cet élément déclencheur sert à observer la fin du carousel */}
           <div id={`load-more-trigger-${genreId}`} className="w-full h-0"></div>
         </CarouselContent>
       </Carousel>

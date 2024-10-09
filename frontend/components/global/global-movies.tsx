@@ -79,6 +79,8 @@ export const GlobalMovies = ({ type }: { type: "popular" | "best" }) => {
                       <MovieTrailer
                         movieTitle={movie.title}
                         movieId={movie.id}
+                        movieOverview={movie.overview}
+                        moviePosterPath={movie.poster_path}
                       />
                       <DialogDescription>{movie.overview}</DialogDescription>
                     </DialogHeader>

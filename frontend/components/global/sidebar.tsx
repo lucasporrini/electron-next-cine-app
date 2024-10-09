@@ -26,7 +26,15 @@ const Sidebar = () => {
 
   return (
     <div className="fixed p-4 space-y-6 rounded-3xl bg-primary-foreground w-52 h-[calc(100vh-30px)]">
-      <h2>Logo</h2>
+      <Link href="/">
+        <img
+          src="/logo.png"
+          width="100px"
+          height="40px"
+          className="mt-2 mb-4"
+          alt="logo"
+        />
+      </Link>
       <nav className="flex flex-col items-start gap-4">
         <Link
           href="/"
@@ -46,7 +54,7 @@ const Sidebar = () => {
           <span>Explore</span>
         </Link>
         <Link
-          href="#"
+          href="/favorites"
           className="flex items-center gap-2 transition-all hover:text-secondary"
         >
           <HeartIcon size={18} />
