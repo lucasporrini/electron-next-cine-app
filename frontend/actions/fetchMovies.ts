@@ -77,3 +77,16 @@ export const fetchMovieVideos = async (movieId: number) => {
     console.error(error);
   }
 };
+
+export const getMovieByName = async (movieName: string) => {
+  try {
+    const response = await fetch(
+      `${process.env.API_URL}search/movie?api_key=${process.env.API_KEY}&query=${movieName}&language=fr-FR`
+    );
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};

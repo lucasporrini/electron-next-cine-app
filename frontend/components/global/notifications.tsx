@@ -28,7 +28,8 @@ export const Notifications = () => {
       <PopoverTrigger asChild>
         <Button className="relative p-0 rounded-full aspect-square">
           <BellIcon size={18} />
-          {notifications.filter((n) => n.isRead === false).length > 0 && (
+          {notifications.filter((notification) => notification.isRead === false)
+            .length > 0 && (
             <span className="absolute top-0 right-0 flex items-center justify-center p-1 bg-red-600 rounded-full translate-x-1/3 size-4 aspect-square">
               {notifications.filter((n) => n.isRead === false).length > 9 ? (
                 <span className="text-xs">9+</span>
