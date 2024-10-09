@@ -1,5 +1,4 @@
 "use client";
-import { BellIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
@@ -11,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Notifications } from "./notifications";
 
 const Header = () => {
   const [user, setUser] = useState(null);
@@ -33,9 +33,7 @@ const Header = () => {
         </SelectContent>
       </Select>
       <Input type="search" placeholder="Search" />
-      <Button className="rounded-full">
-        <BellIcon size={18} />
-      </Button>
+      <Notifications />
       <Link href={user ? "/profile" : "/login"}>
         {user ? (
           <div className="flex items-center gap-2 p-1 rounded-full bg-primary-foreground hover:bg-secondary min-w-[110px] w-fit">

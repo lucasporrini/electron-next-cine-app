@@ -24,7 +24,6 @@ export const LikeButton = ({
   const [currentLikedMovies, setCurrentLikedMovies] = useState<Movie[]>([]);
 
   useEffect(() => {
-    // Charger les films aimés depuis localStorage
     setCurrentLikedMovies(
       JSON.parse(localStorage.getItem("likedMovies") || "[]")
     );
@@ -33,18 +32,28 @@ export const LikeButton = ({
   const toggleFavorite = () => {
     const localMovies = JSON.parse(localStorage.getItem("likedMovies") || "[]");
 
-    // Vérifier si le film est déjà dans les favoris
     const isFavorite = localMovies.some((movie: Movie) => movie.id === movieId);
 
     if (isFavorite) {
-      // Supprimer le film des favoris
       const updatedMovies = localMovies.filter(
         (movie: Movie) => movie.id !== movieId
       );
       localStorage.setItem("likedMovies", JSON.stringify(updatedMovies));
       setCurrentLikedMovies(updatedMovies);
+
+      localStorage.setItem(
+        "notifications",
+        JSON.stringify([
+          {
+            title: "Suppression des favoris",
+            description: `Le film ${movieTitle} a été supprimé des favoris`,
+            isRead: false,
+            date: new Date(),
+          },
+          ...JSON.parse(localStorage.getItem("notifications") || "[]"),
+        ])
+      );
     } else {
-      // Ajouter le film aux favoris
       const newMovie = {
         id: movieId,
         title: movieTitle,
@@ -54,6 +63,19 @@ export const LikeButton = ({
       const updatedMovies = [...localMovies, newMovie];
       localStorage.setItem("likedMovies", JSON.stringify(updatedMovies));
       setCurrentLikedMovies(updatedMovies);
+
+      localStorage.setItem(
+        "notifications",
+        JSON.stringify([
+          {
+            title: "Nouvel ajout aux favoris",
+            description: `Le film ${movieTitle} a été ajouté à vos favoris`,
+            isRead: false,
+            date: new Date(),
+          },
+          ...JSON.parse(localStorage.getItem("notifications") || "[]"),
+        ])
+      );
     }
   };
 
