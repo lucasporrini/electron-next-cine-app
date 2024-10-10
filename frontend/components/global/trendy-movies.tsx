@@ -2,15 +2,7 @@ import { fetchMovies } from "@/actions/fetchMovies";
 import { useQuery } from "@tanstack/react-query";
 import { LoaderCircleIcon } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { MovieTrailer } from "./movie-trailer";
+import { MovieModal } from "./movie-modal";
 
 export const TrendyMovies = () => {
   const {
@@ -41,25 +33,7 @@ export const TrendyMovies = () => {
                 key={movie.id}
                 className="relative w-full pl-0 ml-4 overflow-hidden md:basis-1/4 lg:basis-1/5 group"
               >
-                <Dialog>
-                  <DialogTrigger>
-                    <img
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                      alt={movie.title}
-                      className="w-full h-auto rounded-2xl"
-                    />
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle className="p-0 m-0"></DialogTitle>
-                      <MovieTrailer
-                        movieTitle={movie.title}
-                        movieId={movie.id}
-                      />
-                      <DialogDescription>{movie.overview}</DialogDescription>
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
+                <MovieModal {...movie} />
               </CarouselItem>
             ))}
         </CarouselContent>

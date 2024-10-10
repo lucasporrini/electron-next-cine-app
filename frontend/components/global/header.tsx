@@ -41,16 +41,16 @@ const Header = () => {
             // @ts-ignore - target defined
             setSearch(event.target.value);
             // @ts-ignore - target defined
-            console.log("Search for:", event.target.value);
-            // @ts-ignore - target defined
-            const fetchedMovies = await getMovieByName(event.target.value);
-            setResult(fetchedMovies.results);
-            console.log("fetchedMovies", fetchedMovies);
+            if (event.target.value !== null) {
+              // @ts-ignore - target defined
+              const fetchedMovies = await getMovieByName(event.target.value);
+              setResult(fetchedMovies.results);
+            }
           }, 500);
         }}
       />
       {search && (
-        <div className="fixed z-50 flex flex-col gap-3 px-6 py-4 top-1/2 left-1/2 bg-primary rounded-xl w-[500px] -translate-x-1/2 -translate-y-1/2">
+        <div className="fixed z-50 flex flex-col gap-4 px-6 py-4 top-1/2 left-1/2 bg-primary rounded-xl w-[500px] -translate-x-1/2 -translate-y-1/2">
           <h3 className="font-bold">Find your movie now 🍿</h3>
           <Carousel className="cursor-grab">
             <CarouselContent>
@@ -60,7 +60,7 @@ const Header = () => {
                   className="relative w-full pl-0 ml-4 overflow-hidden md:basis-1/3 lg:basis-1/3 group"
                 >
                   <Dialog>
-                    <DialogTrigger>
+                    <DialogTrigger className={!movie.poster_path && "h-full"}>
                       {movie.poster_path ? (
                         <img
                           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -68,7 +68,7 @@ const Header = () => {
                           className="w-full h-[250px] rounded-2xl"
                         />
                       ) : (
-                        <span className="flex items-center justify-center my-auto">
+                        <span className="flex items-center justify-center h-full">
                           Oh! An error appeared while fetching the movie poster
                           😢
                         </span>

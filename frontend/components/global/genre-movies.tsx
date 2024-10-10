@@ -1,19 +1,11 @@
 "use client";
 import { fetchMoviesByGenre, getGenres } from "@/actions/fetchMovies";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { DialogTitle } from "@radix-ui/react-dialog";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import { Skeleton } from "../ui/skeleton";
-import { MovieTrailer } from "./movie-trailer";
+import { MovieModal } from "./movie-modal";
 
 export const GenreMovies = ({
   genreId,
@@ -105,32 +97,12 @@ export const GenreMovies = ({
       <Carousel className="cursor-grab">
         <CarouselContent>
           {moviesByGenre &&
-            moviesByGenre.results.map((movie, index) => (
+            moviesByGenre.results.map((movie) => (
               <CarouselItem
                 key={movie.id}
                 className="relative w-full pl-0 ml-4 overflow-hidden md:basis-1/4 lg:basis-1/6 group"
               >
-                <Dialog>
-                  <DialogTrigger>
-                    <img
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                      alt={movie.title}
-                      className="w-full h-auto rounded-2xl"
-                    />
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle className="p-0 m-0"></DialogTitle>
-                      <MovieTrailer
-                        movieTitle={movie.title}
-                        movieId={movie.id}
-                        movieOverview={movie.overview}
-                        moviePosterPath={movie.poster_path}
-                      />
-                      <DialogDescription>{movie.overview}</DialogDescription>
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
+                <MovieModal {...movie} />
               </CarouselItem>
             ))}
           <div id={`load-more-trigger-${genreId}`} className="w-full h-0"></div>

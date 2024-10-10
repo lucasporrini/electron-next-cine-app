@@ -1,18 +1,10 @@
 "use client";
 import { getBestMovies, getPopularMovies } from "@/actions/fetchMovies";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { DialogTitle } from "@radix-ui/react-dialog";
 import { useQuery } from "@tanstack/react-query";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import { Skeleton } from "../ui/skeleton";
-import { MovieTrailer } from "./movie-trailer";
+import { MovieModal } from "./movie-modal";
 
 export const GlobalMovies = ({ type }: { type: "popular" | "best" }) => {
   const {
@@ -65,27 +57,7 @@ export const GlobalMovies = ({ type }: { type: "popular" | "best" }) => {
                 key={movie.id}
                 className="relative w-full pl-0 ml-4 overflow-hidden md:basis-1/4 lg:basis-1/6 group"
               >
-                <Dialog>
-                  <DialogTrigger>
-                    <img
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                      alt={movie.title}
-                      className="w-full h-auto rounded-2xl"
-                    />
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle className="p-0 m-0"></DialogTitle>
-                      <MovieTrailer
-                        movieTitle={movie.title}
-                        movieId={movie.id}
-                        movieOverview={movie.overview}
-                        moviePosterPath={movie.poster_path}
-                      />
-                      <DialogDescription>{movie.overview}</DialogDescription>
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
+                <MovieModal {...movie} />
               </CarouselItem>
             ))}
         </CarouselContent>

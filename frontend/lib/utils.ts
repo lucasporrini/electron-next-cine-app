@@ -15,3 +15,8 @@ export const convertDate = (dateString: string) => {
 
   return `${day}/${month} à ${hours}:${minutes}`;
 };
+
+export const incrementInLocalStorage = () => {
+  const count = localStorage.getItem("count") || 0;
+  localStorage.setItem("count", String(Number(count) + 1));
+};
