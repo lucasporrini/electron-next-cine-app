@@ -42,6 +42,9 @@ const Header = () => {
             setSearch(event.target.value);
             // @ts-ignore - target defined
             if (event.target.value !== null) {
+              // block the scroll of the second body child when the modal is open
+              // @ts-ignore - document global
+              document.body.children[1].style.overflow = "hidden";
               // @ts-ignore - target defined
               const fetchedMovies = await getMovieByName(event.target.value);
               setResult(fetchedMovies.results);
@@ -50,14 +53,17 @@ const Header = () => {
         }}
       />
       {search && (
-        <div className="fixed z-50 flex flex-col gap-4 px-6 py-4 top-1/2 left-1/2 bg-primary rounded-xl w-[500px] -translate-x-1/2 -translate-y-1/2">
+        <div className="fixed z-50 flex flex-col gap-4 px-6 py-4 top-1/2 left-1/2 bg-[#9d9d9d] rounded-xl w-[800px] min-h-[300px] -translate-x-1/2 -translate-y-1/2">
           <h3 className="font-bold">Find your movie now 🍿</h3>
           <Carousel className="cursor-grab">
             <CarouselContent>
+              {result.length === 0 && (
+                <span className="ml-4">No movie found 😓</span>
+              )}
               {result.map((movie, index) => (
                 <CarouselItem
                   key={movie.id}
-                  className="relative w-full pl-0 ml-4 overflow-hidden md:basis-1/3 lg:basis-1/3 group"
+                  className="relative w-full pl-0 ml-4 overflow-hidden md:basis-1/4 lg:basis-1/5 group"
                 >
                   <Dialog>
                     <DialogTrigger className={!movie.poster_path && "h-full"}>
@@ -103,8 +109,8 @@ const Header = () => {
               alt="User avatar"
             />
             <span className="px-1 py-0.5 w-[50px]">
-              {user?.username.charAt(0).toUpperCase()}
-              {user?.username.slice(1, 10)}
+              {profile?.name.charAt(0).toUpperCase()}
+              {profile?.name.slice(1, 10)}
             </span>
           </div>
         ) : (

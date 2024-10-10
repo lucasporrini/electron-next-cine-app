@@ -1,8 +1,9 @@
 "use client";
+import { EditProfile } from "@/components/global/edit-profile";
 import { useProfile } from "@/components/providers/profile-provider";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { ClapperboardIcon, HeartIcon } from "lucide-react";
+import { ClapperboardIcon, HeartIcon, LogOutIcon } from "lucide-react";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -29,25 +30,29 @@ const ProfilePage = () => {
         />
         <div className="flex flex-col gap-2">
           <h3 className="text-xl font-semibold">
-            {user?.username.charAt(0).toUpperCase()}
-            {user?.username.slice(1)}
+            {profile?.name.charAt(0).toUpperCase()}
+            {profile?.name.slice(1)}
           </h3>
           <span className="flex items-center justify-center px-3 py-0.5 rounded-full cursor-default bg-primary w-fit">
-            {user?.name.toLowerCase()}
+            {profile?.username.toLowerCase()}
           </span>
-          <span className="text-xs">{user?.email}</span>
+          <span className="text-xs">{profile?.email}</span>
         </div>
       </div>
-      <Button
-        onClick={() => {
-          localStorage.removeItem("user");
-          setUser(null);
-          setProfile(null);
-        }}
-        className="absolute rounded-full top-3 right-5 bg-primary"
-      >
-        Logout
-      </Button>
+      <div className="absolute flex flex-col gap-2 top-3 right-5">
+        <EditProfile />
+        <Button
+          onClick={() => {
+            localStorage.removeItem("user");
+            setUser(null);
+            setProfile(null);
+          }}
+          className="flex items-center gap-2 rounded-full"
+          variant="destructive"
+        >
+          Logout <LogOutIcon size={16} />
+        </Button>
+      </div>
       <Separator className="opacity-10" />
       <div className="flex gap-4">
         <div className="flex items-center justify-center gap-2">
