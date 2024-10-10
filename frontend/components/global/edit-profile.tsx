@@ -122,7 +122,7 @@ export const EditProfile = () => {
                 )}
               />
               <Button type="submit" className="w-full rounded-full">
-                Submit
+                Edit my profile
               </Button>
             </form>
           </Form>
