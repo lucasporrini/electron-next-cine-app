@@ -28,13 +28,14 @@ const ProfilePage = () => {
           alt="User avatar"
         />
         <div className="flex flex-col gap-2">
-          <h3 className="text-2xl font-semibold">
+          <h3 className="text-xl font-semibold">
             {user?.username.charAt(0).toUpperCase()}
             {user?.username.slice(1)}
           </h3>
           <span className="flex items-center justify-center px-3 py-0.5 rounded-full cursor-default bg-primary w-fit">
             {user?.name.toLowerCase()}
           </span>
+          <span className="text-xs">{user?.email}</span>
         </div>
       </div>
       <Button
@@ -54,7 +55,9 @@ const ProfilePage = () => {
             size={32}
             className="p-1.5 rounded-full bg-primary aspect-square"
           />
-          <span>{JSON.parse(localStorage.getItem("count"))}</span>
+          <span>
+            {JSON.parse(localStorage.getItem("count"))} films consultés
+          </span>
         </div>
         <div className="flex items-center justify-center gap-2">
           <HeartIcon
@@ -62,27 +65,10 @@ const ProfilePage = () => {
             className="p-1.5 rounded-full bg-primary aspect-square"
           />
           <span>
-            {JSON.parse(localStorage.getItem("likedMovies") || "[]").length}
+            {JSON.parse(localStorage.getItem("likedMovies") || "[]").length}{" "}
+            favoris
           </span>
         </div>
-      </div>
-      <div>
-        <h3 className="text-lg">Informations</h3>
-        <p>
-          <span className="font-bold">Username:</span> {user?.username}
-        </p>
-        <p>
-          <span className="font-bold">Email:</span> {user?.email}
-        </p>
-      </div>
-      <div>
-        {/* Nombre de films en favoris */}
-        <h3 className="text-lg">Favorites</h3>
-        <p>
-          Vous avez{" "}
-          {JSON.parse(localStorage.getItem("likedMovies") || "[]").length} films
-          en favoris
-        </p>
       </div>
     </div>
   );
