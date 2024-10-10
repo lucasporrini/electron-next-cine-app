@@ -1,12 +1,5 @@
 "use client";
-import { cn } from "@/lib/utils";
-import {
-  CompassIcon,
-  HeartIcon,
-  HouseIcon,
-  SettingsIcon,
-  UserIcon,
-} from "lucide-react";
+import { CompassIcon, HeartIcon, HouseIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useProfile } from "../providers/profile-provider";
@@ -40,10 +33,7 @@ const Sidebar = () => {
       <nav className="flex flex-col items-start gap-4">
         <Link
           href="/"
-          className={cn(
-            "flex items-center gap-2 transition-all hover:text-secondary",
-            currentPath === "/" ? "text-secondary" : ""
-          )}
+          className="flex items-center gap-2 transition-all hover:text-secondary"
         >
           <HouseIcon size={18} />
           <span>Home</span>
@@ -69,13 +59,6 @@ const Sidebar = () => {
         >
           <UserIcon size={18} />
           <span>Profile</span>
-        </Link>
-        <Link
-          href="/settings"
-          className="flex items-center gap-2 transition-all hover:text-secondary"
-        >
-          <SettingsIcon size={18} />
-          <span>Settings</span>
         </Link>
       </nav>
     </div>

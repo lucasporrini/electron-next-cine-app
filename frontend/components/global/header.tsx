@@ -1,7 +1,8 @@
 "use client";
 import { getGenres, getMovieByName } from "@/actions/fetchMovies";
+import { XIcon } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useProfile } from "../providers/profile-provider";
 import { Button } from "../ui/button";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
@@ -32,6 +33,7 @@ const Header = () => {
   const [allGenres, setAllGenres] = useState([]);
   const [filterByGenre, setFilterByGenre] = useState(null);
   const [filterByYear, setFilterByYear] = useState(null);
+  const input = useRef(null);
 
   useEffect(() => {
     if (profile) setUser(profile);
@@ -55,7 +57,8 @@ const Header = () => {
       [...new Set(result.map((movie) => movie.release_date))]
         .map((date) => date.slice(0, 4))
         .sort((a, b) => b - a)
-        .filter((value, index, self) => self.indexOf(value) === index),
+        .filter((value, index, self) => self.indexOf(value) === index)
+        .filter((year) => year !== ""),
     [result]
   );
 
@@ -76,52 +79,103 @@ const Header = () => {
 
   return (
     <header className="flex items-center gap-4">
-      <Input type="search" placeholder="Search" onInput={handleSearch} />
+      <Input
+        type="search"
+        placeholder="Search"
+        onInput={handleSearch}
+        ref={input}
+      />
 
       {search && (
-        <div className="fixed z-50 flex flex-col gap-4 px-6 py-4 top-1/2 left-1/2 bg-[#9d9d9d] rounded-xl w-[800px] min-h-[300px] -translate-x-1/2 -translate-y-1/2">
-          <h3 className="font-bold">Find your movie now 🍿</h3>
+        <div className="fixed z-50 flex flex-col gap-6 px-6 py-4 top-1/2 left-1/2 bg-[#9d9d9d] rounded-xl w-[800px] min-h-[300px] -translate-x-1/2 -translate-y-1/2">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-bold">Find your movie now 🍿</h3>
 
-          {/* Filter section */}
-          <div className="flex justify-between gap-4">
-            {/* Genre Filter */}
-            <Select onValueChange={setFilterByGenre} value={filterByGenre}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a genre" />
-              </SelectTrigger>
-              <SelectContent>
-                {filteredGenres.map(
-                  (genre, index) =>
-                    genre !== null && (
-                      <SelectItem key={index} value={genre.id}>
-                        {genre.name}
-                      </SelectItem>
-                    )
-                )}
-              </SelectContent>
-            </Select>
+            {/* Filter section */}
+            <div className="flex items-center gap-2">
+              <Button
+                variant="link"
+                className="text-white"
+                onClick={() => {
+                  setFilterByGenre(null);
+                  setFilterByYear(null);
+                }}
+              >
+                Clean filters
+              </Button>
+              {/* Genre Filter */}
+              <Select
+                onValueChange={setFilterByGenre}
+                value={filterByGenre || ""}
+              >
+                <SelectTrigger className="w-[180px] border-white bg-[#9d9d9d]">
+                  <SelectValue placeholder="Select a genre" />
+                </SelectTrigger>
+                <SelectContent className="border-white bg-[#9d9d9d]">
+                  {filteredGenres.map(
+                    (genre, index) =>
+                      genre !== null && (
+                        <SelectItem key={index} value={genre.id}>
+                          {genre.name}
+                        </SelectItem>
+                      )
+                  )}
+                </SelectContent>
+              </Select>
 
-            {/* Year Filter */}
-            <Select onValueChange={setFilterByYear} value={filterByYear}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a genre" />
-              </SelectTrigger>
-              <SelectContent>
-                {filteredYears.map(
-                  (year, index) =>
-                    year !== null && (
-                      <SelectItem key={index} value={year}>
-                        {year}
-                      </SelectItem>
-                    )
-                )}
-              </SelectContent>
-            </Select>
+              {/* Year Filter */}
+              <Select
+                onValueChange={setFilterByYear}
+                value={filterByYear || ""}
+              >
+                <SelectTrigger className="w-[180px] border-white bg-[#9d9d9d]">
+                  <SelectValue placeholder="Select a year" />
+                </SelectTrigger>
+                <SelectContent className="border-white bg-[#9d9d9d]">
+                  {filteredYears.map(
+                    (year, index) =>
+                      year !== null && (
+                        <SelectItem key={index} value={year}>
+                          {year}
+                        </SelectItem>
+                      )
+                  )}
+                </SelectContent>
+              </Select>
+              <Button
+                onClick={() => {
+                  // @ts-ignore - document global
+                  document.body.children[1].style.overflow = "auto";
+                  setSearch("");
+                  setResult([]);
+                  setFilterByGenre(null);
+                  setFilterByYear(null);
+                  input.current.value = "";
+                }}
+                className="p-0 rounded-full cursor-pointer aspect-square bg-[#9d9d9d] shadow-none"
+              >
+                <XIcon />
+              </Button>
+            </div>
           </div>
 
           {/* Carousel */}
           <Carousel className="cursor-grab">
             <CarouselContent>
+              {result
+                .filter((movie) =>
+                  filterByGenre ? movie.genre_ids.includes(filterByGenre) : true
+                )
+                .filter((movie) =>
+                  filterByYear
+                    ? movie.release_date.includes(filterByYear)
+                    : true
+                ).length === 0 && (
+                <span className="ml-4">
+                  We can't find a movie with your current filters, retry by
+                  changing filters 🎬
+                </span>
+              )}
               {result
                 .filter((movie) =>
                   filterByGenre ? movie.genre_ids.includes(filterByGenre) : true
@@ -182,7 +236,7 @@ const Header = () => {
               src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671122.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1728172800&semt=ais_hybrid"
               alt="User avatar"
             />
-            <span className="px-1 py-0.5 w-[50px]">
+            <span className="px-1 py-0.5 w-32 truncate">
               {profile?.name.charAt(0).toUpperCase()}
               {profile?.name.slice(1, 10)}
             </span>
