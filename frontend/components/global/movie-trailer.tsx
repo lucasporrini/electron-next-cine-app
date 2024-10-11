@@ -60,6 +60,7 @@ export const MovieTrailer = ({
               <h3 className="text-xl font-semibold leading-none tracking-tight">
                 {movieTitle}
               </h3>
+
               <div className="flex items-center gap-2">
                 <LikeButton
                   movieId={movieId}

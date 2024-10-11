@@ -33,6 +33,7 @@ const Header = () => {
   const [allGenres, setAllGenres] = useState([]);
   const [filterByGenre, setFilterByGenre] = useState(null);
   const [filterByYear, setFilterByYear] = useState(null);
+  const [filterByLanguage, setFilterByLanguage] = useState(null);
   const input = useRef(null);
 
   useEffect(() => {
@@ -49,7 +50,7 @@ const Header = () => {
       [...new Set(result.flatMap((movie) => movie.genre_ids))].map((id) =>
         allGenres.find((genre) => genre.id === id)
       ),
-    [result]
+    [result, allGenres]
   );
 
   const filteredYears = useMemo(
@@ -59,6 +60,11 @@ const Header = () => {
         .sort((a, b) => b - a)
         .filter((value, index, self) => self.indexOf(value) === index)
         .filter((year) => year !== ""),
+    [result]
+  );
+
+  const filteredLanguage = useMemo(
+    () => [...new Set(result.map((movie) => movie.original_language))],
     [result]
   );
 
@@ -87,7 +93,7 @@ const Header = () => {
       />
 
       {search && (
-        <div className="fixed z-50 flex flex-col gap-6 px-6 py-4 top-1/2 left-1/2 bg-[#9d9d9d] rounded-xl w-[800px] min-h-[300px] -translate-x-1/2 -translate-y-1/2">
+        <div className="fixed z-50 flex flex-col gap-6 px-6 py-4 top-1/2 left-1/2 bg-[#9d9d9d] rounded-xl w-[1000px] min-h-[300px] -translate-x-1/2 -translate-y-1/2">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold">Find your movie now 🍿</h3>
 
@@ -99,10 +105,34 @@ const Header = () => {
                 onClick={() => {
                   setFilterByGenre(null);
                   setFilterByYear(null);
+                  setFilterByLanguage(null);
                 }}
               >
                 Clean filters
               </Button>
+
+              {/* Language Filter */}
+              <Select
+                onValueChange={setFilterByLanguage}
+                value={filterByLanguage || ""}
+              >
+                <SelectTrigger className="w-[180px] border-white bg-[#9d9d9d]">
+                  <SelectValue placeholder="Select a language" />
+                </SelectTrigger>
+                <SelectContent className="border-white  bg-[#9d9d9d]">
+                  {filteredLanguage
+                    .sort((a, b) => b - a)
+                    .map(
+                      (language, index) =>
+                        language !== null && (
+                          <SelectItem key={index} value={language}>
+                            {language.toUpperCase()}
+                          </SelectItem>
+                        )
+                    )}
+                </SelectContent>
+              </Select>
+
               {/* Genre Filter */}
               <Select
                 onValueChange={setFilterByGenre}
@@ -172,7 +202,7 @@ const Header = () => {
                     : true
                 ).length === 0 && (
                 <span className="ml-4">
-                  We can't find a movie with your current filters, retry by
+                  We can&apos;t find a movie with your current filters, retry by
                   changing filters 🎬
                 </span>
               )}
@@ -185,10 +215,15 @@ const Header = () => {
                     ? movie.release_date.includes(filterByYear)
                     : true
                 )
+                .filter((movie) =>
+                  filterByLanguage
+                    ? movie.original_language.includes(filterByLanguage)
+                    : true
+                )
                 .map((movie, index) => (
                   <CarouselItem
                     key={movie.id}
-                    className="relative w-full pl-0 ml-4 overflow-hidden md:basis-1/4 lg:basis-1/5 group"
+                    className="relative w-full pl-0 ml-4 overflow-hidden md:basis-1/5 lg:basis-1/6 group"
                   >
                     <Dialog>
                       <DialogTrigger>
