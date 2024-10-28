@@ -8,8 +8,8 @@ import {
 import { Notifications } from "../global/notifications";
 
 type NotificationsContextType = {
-  notifications: Notifications[] | [];
-  setNotifications: Dispatch<SetStateAction<Notifications[] | []>>;
+  notifications: Notifications[];
+  setNotifications: Dispatch<SetStateAction<Notifications[]>>;
 };
 
 const NotificationsContext = createContext<
