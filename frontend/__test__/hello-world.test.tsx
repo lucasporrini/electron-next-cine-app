@@ -11,3 +11,9 @@ describe("Hello World Page", () => {
     expect(heading).toBeInTheDocument();
   });
 });
+
+describe("Get local storage", () => {
+  it("should return an empty array", () => {
+    expect(localStorage.getItem("user")).toBe(null);
+  });
+});
