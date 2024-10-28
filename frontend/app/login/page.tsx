@@ -19,9 +19,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export const description =
-  "A simple login form with email and password. The submit button says 'Sign in'.";
-
 const LoginForm = () => {
   const [user, setUser] = useState(null);
   const { setProfile } = useProfile();

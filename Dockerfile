@@ -1,8 +1,8 @@
 # Utiliser l'image officielle de Node.js
-FROM node:18
+FROM node:20
 
 # Définir le répertoire de travail
-WORKDIR /app
+WORKDIR /frontend/app
 
 # Copier les fichiers de l'application et installer les dépendances
 COPY package*.json ./
