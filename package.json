@@ -28,6 +28,9 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
+  "build": {
+    "publish": null
+  },
   "packageManager": "yarn@1.22.22",
   "dependencies": {
     "@babel/preset-env": "^7.26.0",
