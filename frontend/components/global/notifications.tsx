@@ -87,7 +87,7 @@ export const Notifications = () => {
                     setNotifications(
                       notifications.filter((n, i) => i !== index)
                     );
-                    // Supprimer la notification du localStorage
+
                     localStorage.setItem(
                       "notifications",
                       JSON.stringify(
