@@ -9,6 +9,7 @@ const queryClient = new QueryClient();
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
+    // Providers are nested the way they are to ensure that the query client and the profile are available to all components
     <QueryClientProvider client={queryClient}>
       <ProfileProvider>
         <NotificationsProvider>

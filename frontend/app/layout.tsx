@@ -17,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex h-screen !p-4 overflow-hidden text-white bg-primary">
+        {/* Importation of all the client providers */}
         <Providers>
           <Sidebar />
           <div className="relative flex-1 ml-56 overflow-x-hidden">
