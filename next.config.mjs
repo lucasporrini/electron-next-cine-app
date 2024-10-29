@@ -1,13 +1,17 @@
+import { createMDX } from "fumadocs-mdx/next";
+
 /** @type {import('next').NextConfig} */
+const withMDX = createMDX();
+
 const nextConfig = {
   output: "standalone",
   trailingSlash: true,
   distDir: "build",
+  reactStrictMode: true,
   assetPrefix: process.env.NODE_ENV === "production" ? "." : undefined,
   images: {
     unoptimized: true,
   },
-  // Configure SVGR
   webpack(config) {
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.(".svg")
@@ -30,4 +34,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withMDX(nextConfig);
